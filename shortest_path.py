@@ -23,7 +23,7 @@ from ryu.lib.packet import ethernet
 from ryu.topology import event, switches
 from ryu.topology import get_switch, get_link
 import networkx as nx
-from pprint import pprint
+import pprint
 
 
 class SimpleSwitch13(app_manager.RyuApp):
@@ -110,8 +110,8 @@ class SimpleSwitch13(app_manager.RyuApp):
         switches=[switch.dp.id for switch in switch_list]
         links_list = get_link(self.topology_api_app, None)
         links=[(link.src.dpid,link.dst.dpid,{'port':link.src.port_no}) for link in links_list]
-		pprint(switches)
-		pprint(links)
+		pprint.pprint(switches)
+		pprint.pprint(links)
 		
 		
 		
