@@ -38,6 +38,7 @@ class SimpleSwitch13(app_manager.RyuApp):
         self.mac_to_port = {}
         self.topology_api_app=self
         self.net=nx.DiGraph()
+#        hub.spawn(self.show_info)
         
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
@@ -66,7 +67,7 @@ class SimpleSwitch13(app_manager.RyuApp):
         mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
                                         match=match, instructions=inst)
         datapath.send_msg(mod)
-        print "add_flow"
+        print "*****************add_flow*****************"
         
     
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
@@ -101,13 +102,17 @@ class SimpleSwitch13(app_manager.RyuApp):
             print self.net.edges()
 
         if dst in self.net.nodes():
-            path=nx.shortest_path(self.net, src, dst)
             
-            print "*******Path**********"
-            print path
-            
-            next=path[path.index(dpid)+1]
-            out_port=self.net[dpid][next]['port']
+            try:
+                path=nx.shortest_path(self.net, src, dst)
+                
+                print "*******Path**********"
+                print path
+                
+                next=path[path.index(dpid)+1]
+                out_port=self.net[dpid][next]['port']
+            except:
+                out_port = ofproto.OFPP_FLOOD
         else:
             out_port = ofproto.OFPP_FLOOD
             
@@ -145,6 +150,15 @@ class SimpleSwitch13(app_manager.RyuApp):
          self.net.add_nodes_from(switches)
          self.net.add_edges_from(links)
          
+         
+#    def get_edges_weight():
+
+#    def show_info(self):
+#        while True:
+#            nx.draw(self.net)
+#            plt.show()
+            
+#            hub.sleep(10)
          
          
 
