@@ -67,7 +67,7 @@ class SimpleSwitch13(app_manager.RyuApp):
         mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
                                         match=match, instructions=inst)
         datapath.send_msg(mod)
-        print "*****************add_flow*****************"
+#        print "*****************add_flow*****************"
         
     
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
@@ -83,11 +83,10 @@ class SimpleSwitch13(app_manager.RyuApp):
 
         dst = eth.dst
         src = eth.src
+#        print src
 
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})   
-        
-
         
         
         if src not in self.net.nodes():
@@ -95,11 +94,14 @@ class SimpleSwitch13(app_manager.RyuApp):
             self.net.add_edge(dpid,src,{'port':in_port})
             self.net.add_edge(src,dpid)
             
-            print "*****List of nodes*******"
-            print self.net.nodes()
+#            print "******add nodes*******"
+#            print src
             
-            print "*****List of edges*******"
-            print self.net.edges()
+#            print "*****List of nodes*******"
+#            print self.net.nodes()
+#            
+#            print "*****List of edges*******"
+#            print self.net.edges()
 
         if dst in self.net.nodes():
             
@@ -129,15 +131,7 @@ class SimpleSwitch13(app_manager.RyuApp):
         out = parser.OFPPacketOut(
                     datapath=datapath, buffer_id=msg.buffer_id, in_port=in_port,
                     actions=actions, data=data)
-        datapath.send_msg(out)    
-        
-#        print "*********List of nodes**********"
-#        print self.net.nodes()
-#        print "*********List of links**********"
-#        print self.net.edges()             
-        
-
-
+        datapath.send_msg(out)            
 
     @set_ev_cls(event.EventSwitchEnter)
     def get_topology_data(self, ev):
@@ -153,12 +147,17 @@ class SimpleSwitch13(app_manager.RyuApp):
          
 #    def get_edges_weight():
 
-#    def show_info(self):
-#        while True:
+    def show_info(self):
+        while True:
+            print "*********List of nodes*************"
+            print self.net.nodes()
+            print "*********List of edges*************"
+            print self.net.edges()
+            
 #            nx.draw(self.net)
 #            plt.show()
             
-#            hub.sleep(10)
+            hub.sleep(10)
          
          
 
